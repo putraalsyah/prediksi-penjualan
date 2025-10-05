@@ -1,14 +1,15 @@
 import pandas as pd
+import os
+import joblib
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import joblib
-import os
 from sklearn.linear_model import LinearRegression
 
 # Inisialisasi aplikasi Flask
 app = Flask(__name__)
-# Mengaktifkan CORS (Cross-Origin Resource Sharing) agar frontend bisa mengakses API
-CORS(app)
+
+# Konfigurasi CORS untuk mengizinkan permintaan dari GitHub Pages Anda
+CORS(app, resources={r"/predict": {"origins": "https://putraalsyah.github.io"}})
 
 # --- FUNGSI UNTUK MELATIH DAN MENYIMPAN MODEL ---
 def train_and_save_model(data_path='advertising.csv', model_path='advertising_sales_model.pkl'):
@@ -93,3 +94,4 @@ if __name__ == '__main__':
     # Opsi threaded=False penting agar model bisa dimuat sebelum request pertama
     print("Menjalankan server Flask di http://127.0.0.1:5000")
     app.run(host='0.0.0.0', port=5000, debug=True, threaded=False)
+
