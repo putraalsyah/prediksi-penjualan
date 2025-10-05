@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediksi Penjualan - TV Advertising</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            padding-left: 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input[type="number"]:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-label {
+            color: white;
+            font-size: 14px;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .result-value {
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .error {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            animation: shake 0.5s ease-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 5px;
+            font-size: 13px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Prediksi Penjualan</h1>
+        <p class="subtitle">Berdasarkan Budget Iklan TV</p>
+
+        <div class="info-box">
+            💡 Masukkan budget iklan TV Anda untuk mendapatkan prediksi penjualan menggunakan model Machine Learning
+        </div>
+
+        <form id="predictionForm">
+            <div class="form-group">
+                <label for="tvBudget">Budget Iklan TV (dalam ribu)</label>
+                <div class="input-wrapper">
+                    <span class="currency-symbol">$</span>
+                    <input 
+                        type="number" 
+                        id="tvBudget" 
+                        name="tvBudget" 
+                        placeholder="Contoh: 150"
+                        step="0.01"
+                        min="0"
+                        required
+                    >
+                </div>
+            </div>
+
+            <button type="submit">🔮 Prediksi Sekarang</button>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: #666;">Memproses prediksi...</p>
+        </div>
+
+        <div class="result" id="result">
+            <div class="result-label">Prediksi Penjualan</div>
+            <div class="result-value" id="resultValue">-</div>
+        </div>
+
+        <div class="error" id="error"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('predictionForm');
+        const loading = document.getElementById('loading');
+        const result = document.getElementById('result');
+        const resultValue = document.getElementById('resultValue');
+        const error = document.getElementById('error');
+        const tvBudgetInput = document.getElementById('tvBudget');
+
+        // API endpoint - ganti dengan URL server Flask Anda
+        const API_URL = 'https://api-prediksi-penjualan.onrender.com/predict';
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Reset tampilan
+            result.classList.remove('show');
+            error.classList.remove('show');
+            loading.classList.add('show');
+
+            const tvBudget = parseFloat(tvBudgetInput.value);
+
+            // Validasi input
+            if (isNaN(tvBudget) || tvBudget < 0) {
+                showError('Mohon masukkan nilai budget yang valid!');
+                loading.classList.remove('show');
+                return;
+            }
+
+            try {
+                // Kirim request ke API
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        tv_budget: tvBudget
+                    })
+                });
+
+                const data = await response.json();
+
+                loading.classList.remove('show');
+
+                if (response.ok) {
+                    // Tampilkan hasil prediksi
+                    resultValue.textContent = `${data.predicted_sales.toLocaleString('id-ID', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })} unit`;
+                    result.classList.add('show');
+                } else {
+                    // Tampilkan error dari server
+                    showError(data.error || 'Terjadi kesalahan saat memproses prediksi');
+                }
+            } catch (err) {
+                loading.classList.remove('show');
+                showError('Tidak dapat terhubung ke server. Pastikan server Flask sudah berjalan di http://127.0.0.1:5000');
+                console.error('Error:', err);
+            }
+        });
+
+        function showError(message) {
+            error.textContent = '❌ ' + message;
+            error.classList.add('show');
+            
+            // Hapus pesan error setelah 5 detik
+            setTimeout(() => {
+                error.classList.remove('show');
+            }, 5000);
+        }
+
+        // Auto-focus pada input saat halaman dimuat
+        window.addEventListener('load', () => {
+            tvBudgetInput.focus();
+        });
+    </script>
+</body>
+</html>
